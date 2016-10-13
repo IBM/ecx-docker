@@ -1,0 +1,53 @@
+version: '2'
+services:
+  databasePostgres:
+     restart: always
+     image: postgres:8.4
+     environment:
+       - POSTGRES_PASSWORD=postgres
+     volumes:
+       - /data/postgres:/var/lib/postgresql/data
+  databaseMongo:
+     restart: always
+     image: mongo:3.0.6
+     volumes:
+       - /data/mongo:/data/db
+  databaseCatalog:
+     restart: always
+     image: mongo:3.0.6
+     volumes:
+       - /data2/mongo:/data/db
+  discoveryServer:
+     restart: always
+     image: catalogicsoftware/discovery
+     ports:
+       - "8761:8761"
+  ecx:
+    restart: always
+    depends_on:
+      - databasePostgres
+      - databaseMongo
+      - databaseCatalog
+      - discoveryServer
+    image: docker-repo.devad.catalogic.us:5000/ecx_engine:latest 
+    ports:
+      - "8443:8443"
+      - "5672:5672"
+      - "5671:5671"
+    volumes:
+      - /data/ecx:/data
+      - /data/ecx/ecx-custom:/opt/ECX/virgo/repository/ecx-custom
+      - /data2:/data2:ro
+    links:
+      - databasePostgres:pg
+      - databaseMongo:mng
+      - databaseCatalog:mng_ct
+      - discoveryServer:eureka
+    environment:
+      - HOME=/root
+      - TZ=America/New_York
+      - PG_PORT_5432_TCP_ADDR=pg
+      - MNG_PORT_27017_TCP_ADDR=mng
+      - MNG_CT_PORT_27017_TCP_ADDR=mng_ct
+      - EUREKA_PORT_8761_TCP_ADDR=eureka
+      - EUREKA_PORT_8761_TCP_PORT=8761
