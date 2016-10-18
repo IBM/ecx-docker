@@ -29,10 +29,9 @@ services:
       - databaseMongo
       - databaseCatalog
       - discoveryServer
-    image: docker-repo.devad.catalogic.us:5000/ecx_engine:latest 
+    image: catalogicsoftware/ecx:2.5 
     ports:
       - "8443:8443"
-      - "5672:5672"
       - "5671:5671"
     volumes:
       - /data/ecx:/data
