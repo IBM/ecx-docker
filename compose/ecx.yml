@@ -22,6 +22,14 @@ services:
      image: catalogicsoftware/discovery
      ports:
        - "8761:8761"
+  vadpProxy:
+     restart: always
+     image: catalogicsoftware/vadp
+     ports:
+       - "8083:8083"
+     environment:
+        - ECX_RMQ_INSTANCE_HOST=${HOSTNAME}
+        - ECX_HOST=${HOSTNAME}
   ecx:
     restart: always
     depends_on:
