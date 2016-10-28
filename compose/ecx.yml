@@ -1,29 +1,24 @@
 version: '2'
 services:
   databasePostgres:
-     restart: always
      image: postgres:8.4
      environment:
        - POSTGRES_PASSWORD=postgres
      volumes:
        - /data/postgres:/var/lib/postgresql/data
   databaseMongo:
-     restart: always
      image: mongo:3.0.6
      volumes:
        - /data/mongo:/data/db
   databaseCatalog:
-     restart: always
      image: mongo:3.0.6
      volumes:
        - /data2/mongo:/data/db
   discoveryServer:
-     restart: always
      image: catalogicsoftware/discovery
      ports:
        - "8761:8761"
   vadpProxy:
-     restart: always
      image: catalogicsoftware/vadp
      ports:
        - "8083:8083"
@@ -31,7 +26,6 @@ services:
         - ECX_RMQ_INSTANCE_HOST=${HOSTNAME}
         - ECX_HOST=${HOSTNAME}
   ecx:
-    restart: always
     depends_on:
       - databasePostgres
       - databaseMongo
