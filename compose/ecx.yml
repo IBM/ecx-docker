@@ -5,15 +5,15 @@ services:
      environment:
        - POSTGRES_PASSWORD=postgres
      volumes:
-       - /data/postgres:/var/lib/postgresql/data
+       - /data/ecxdb/postgres:/var/lib/postgresql/data
   databaseMongo:
      image: mongo:3.0.6
      volumes:
-       - /data/mongo:/data/db
+       - /data/ecxdb/mongo:/data/db
   databaseCatalog:
      image: mongo:3.0.6
      volumes:
-       - /data2/mongo:/data/db
+       - /data/ecxcatalog/mongo:/data/db
   discoveryServer:
      image: catalogicsoftware/discovery:2.5.1
      ports:
@@ -36,9 +36,9 @@ services:
       - "8443:8443"
       - "5671:5671"
     volumes:
-      - /data/ecx:/data
-      - /data/ecx/ecx-custom:/opt/ECX/virgo/repository/ecx-custom
-      - /data2:/data2:ro
+      - /data/ecxdb/ecx:/data
+      - /data/ecxdb/ecx/ecx-custom:/opt/ECX/virgo/repository/ecx-custom
+      - /data/ecxcatalog:/data2:ro
     links:
       - databasePostgres:pg
       - databaseMongo:mng
