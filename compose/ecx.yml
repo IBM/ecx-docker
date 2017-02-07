@@ -15,7 +15,7 @@ services:
      volumes:
        - /data/ecxcatalog/mongo:/data/db
   discoveryServer:
-     image: catalogicsoftware/discovery:2.5.1
+     image: catalogicsoftware/discovery
      ports:
        - "8761:8761"
   vadpProxy:
@@ -31,7 +31,7 @@ services:
       - databaseMongo
       - databaseCatalog
       - discoveryServer
-    image: catalogicsoftware/ecx:2.5.1
+    image: catalogicsoftware/ecx
     ports:
       - "8443:8443"
       - "5671:5671"
