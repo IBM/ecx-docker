@@ -1,2 +1,2 @@
 # docker
-dockerized ECX
+dockerized ECX fof 2.5.2
