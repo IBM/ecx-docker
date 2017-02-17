@@ -52,7 +52,3 @@ services:
       - MNG_CT_PORT_27017_TCP_ADDR=mng_ct
       - EUREKA_PORT_8761_TCP_ADDR=eureka
       - EUREKA_PORT_8761_TCP_PORT=8761
-networks:
-    default:
-        external:
-            name: ecxnet
