@@ -1,0 +1,58 @@
+version: '2'
+services:
+  databasePostgres:
+     image: postgres:8.4
+     environment:
+       - POSTGRES_PASSWORD=postgres
+     volumes:
+       - /data/ecxdb/postgres:/var/lib/postgresql/data
+  databaseMongo:
+     image: mongo:3.2.12
+     volumes:
+       - /data/ecxdb/mongo:/data/db
+  databaseCatalog:
+     image: mongo:3.2.12
+     volumes:
+       - /data/ecxcatalog/mongo:/data/db
+  discoveryServer:
+     image: catalogicsoftware/discovery
+     ports:
+       - "8761:8761"
+  vadpProxy:
+     image: catalogicsoftware/vadp
+     ports:
+       - "8083:8083"
+     environment:
+        - ECX_RMQ_INSTANCE_HOST=${HOSTNAME}
+        - ECX_HOST=${HOSTNAME}
+  ecx:
+    depends_on:
+      - databasePostgres
+      - databaseMongo
+      - databaseCatalog
+      - discoveryServer
+    image: docker-repo.devad.catalogic.us:5000/scdm
+    ports:
+      - "8443:8443"
+      - "5671:5671"
+    volumes:
+      - /data/ecxdb/ecx:/data
+      - /data/ecxdb/ecx/ecx-custom:/opt/ECX/virgo/repository/ecx-custom
+      - /data/ecxcatalog:/data2:ro
+    links:
+      - databasePostgres:pg
+      - databaseMongo:mng
+      - databaseCatalog:mng_ct
+      - discoveryServer:eureka
+    environment:
+      - HOME=/root
+      - TZ=America/New_York
+      - PG_PORT_5432_TCP_ADDR=pg
+      - MNG_PORT_27017_TCP_ADDR=mng
+      - MNG_CT_PORT_27017_TCP_ADDR=mng_ct
+      - EUREKA_PORT_8761_TCP_ADDR=eureka
+      - EUREKA_PORT_8761_TCP_PORT=8761
+networks:
+    default:
+        external:
+            name: ecxnet
