@@ -7,11 +7,11 @@ services:
      volumes:
        - /data/ecxdb/postgres:/var/lib/postgresql/data
   databaseMongo:
-     image: mongo:3.0.6
+     image: mongo:3.2.12
      volumes:
        - /data/ecxdb/mongo:/data/db
   databaseCatalog:
-     image: mongo:3.0.6
+     image: mongo:3.2.12
      volumes:
        - /data/ecxcatalog/mongo:/data/db
   discoveryServer:
@@ -52,6 +52,7 @@ services:
       - MNG_CT_PORT_27017_TCP_ADDR=mng_ct
       - EUREKA_PORT_8761_TCP_ADDR=eureka
       - EUREKA_PORT_8761_TCP_PORT=8761
+      - ECX_HOST=${HOSTNAME}
 networks:
     default:
         external:
