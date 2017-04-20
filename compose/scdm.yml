@@ -31,7 +31,7 @@ services:
       - databaseMongo
       - databaseCatalog
       - discoveryServer
-    image: catalogicsoftware/scdm
+    image: ibmscdm/scdm
     ports:
       - "8443:8443"
       - "5671:5671"
